@@ -1,0 +1,122 @@
+import turtle
+import random
+
+# Function to draw a colored line
+def draw_line(color, length):
+    turtle.pendown()
+    turtle.pensize(5)
+    turtle.pencolor(color)
+    turtle.forward(length)
+    turtle.penup()
+    turtle.backward(length)
+
+# Function to hide the turtle behind a random line
+def hide_turtle():
+    lines = ["red", "blue", "yellow"]
+    hiding_place = random.choice(lines)
+    return hiding_place
+
+# Function to create a graphical color guessing game
+def graphical_guessing_game():
+    turtle.speed(1)
+    wn = turtle.Screen()
+    wn.title("Color Guessing Game")
+    
+    # Create a list of colors and shuffle it
+    colors = ["red", "blue", "yellow"]
+    random.shuffle(colors)
+    
+    # Draw three lines with shuffled colors
+    line_positions = [-100, 0, 100]
+    line_ids = []  # Store the IDs of the lines for click detection
+    for position, color in zip(line_positions, colors):
+        turtle.penup()
+        turtle.goto(position, 0)
+        draw_line(color, 100)
+        line_ids.append(turtle.stamp())  # Store the stamp IDs for each line
+    
+    # Hide the turtle behind a random line
+    hiding_place = hide_turtle()
+    
+    # Function to handle clicking on lines
+    def click_handler(x, y):
+        nonlocal hiding_place
+        
+        # Check if the click position is within the y-range of the lines
+        if -20 <= y <= 20:
+            # Iterate through line IDs and check the color of each clicked line
+            for i, line_id in enumerate(line_ids):
+                if wn.onclick(None):  # Disable further clicks during processing
+                    clicked_color = turtle.color()[0]
+                    if clicked_color == hiding_place:
+                        print("Congratulations! You guessed correctly.")
+                    else:
+                        print(f"Sorry, the line was {hiding_place}.")
+                    wn.bye()
+                    return  # Exit the loop once a line is clicked
+                
+    # Set up click event handler
+    wn.onclick(click_handler)
+    
+    print("Welcome to the Color Guessing Game!")
+    print("Click on the line that matches the hidden color.")
+    
+    turtle.done()
+
+# Function to draw a hexagon (renamed to Draw Shapes)
+def draw_shapes():
+    t = turtle.Turtle()
+    t.shape("turtle")
+    
+    for _ in range(6):
+        t.forward(90)
+        t.left(60)
+
+    turtle.done()
+
+# Function to create a colorful design
+def colorful_design():
+    turtle.speed(1)
+    colors = ["red", "orange", "yellow", "green", "blue"]
+
+    for _ in range(18):
+        turtle.color(random.choice(colors))
+        turtle.circle(100)
+        turtle.left(20)
+
+    turtle.hideturtle()
+    turtle.done()
+
+# Screen setup
+wn = turtle.Screen()
+wn.title("Choose a Program")
+wn.bgcolor("white")
+
+while True:
+    # Interface
+    print("Choose a program to run:")
+    print("1. Draw Shapes")
+    print("2. Play the Graphical Color Guessing Game")
+    print("3. Create a Colorful Design")
+    print("4. Quit")
+
+    # User input
+    choice = input("Enter the program number (or '4' to quit): ")
+
+    if choice == "1":
+        draw_shapes()
+
+    elif choice == "2":
+        graphical_guessing_game()
+
+    elif choice == "3":
+        colorful_design()
+
+    elif choice == "4":
+        break
+
+    else:
+        print("Invalid choice. Please enter a valid program number.")
+
+# Close the window when clicked
+wn.exitonclick()
